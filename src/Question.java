@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.InputMismatchException;
+import java.util.Random;
 import java.util.Scanner;
 
 /**
@@ -33,6 +35,9 @@ public class Question {
         this.answer = inc;
     }
 
+    public String getQuestion(){return this.question;}
+    public String getAnswer(){return this.answer;}
+    public String[] getChoices() {return this.choices;}
     //in this I want to get questions, and choices
     public static void scanForQuestions(ArrayList<Question> list, Scanner toScan){
         String lineIn= "";
@@ -48,7 +53,6 @@ public class Question {
             lineIn = toScan.nextLine();
             while (lineIn.length() >=3 && lineIn.contains("a.") != true)
             {
-                //if(lineIn.charAt(lineIn.length()-2) == '?' || lineIn.charAt(lineIn.length()-3) == '?')
                 if(lineIn.contains("a.")!= true)
                 {
                     toAdd.question += lineIn;
@@ -73,8 +77,7 @@ public class Question {
         {
             lineIn = toScan.nextLine();
         }
-        for(int i = 0; i < 15; i++) //need to fix this shizz!!! gotta get it to ID when an answer has
-                                    //two lines instead of just one :)
+        for(int i = 0; i < 15; i++)
         {
             lineIn = toScan.nextLine();
             if(lineIn.contains(">")!= true && lineIn.length() == 1)
@@ -151,5 +154,106 @@ public class Question {
                     }
 
     return newAns;
+    }
+    /*
+    public static void cleanQuestionFromFile(ArrayList<Question> list)//this needs to strip off the letters and numbers
+    {
+        String answer, question;
+        String choices[];
+        int loc;
+        for(int i = 0; i < list.size(); i ++)
+        {
+            answer = list.get(i).getAnswer();
+            question = list.get(i).getQuestion();
+            choices = list.get(i).getChoices();
+            loc = question.indexOf(">");
+            list.get(i).setQuestion(question.substring(loc+1));
+            list.get(i).setAnswer(answer.substring(2));
+
+
+
+
+        }
+    }
+*/
+    public static void CreateAndAddQuestion()
+    {
+        Question toAdd = createQuestion();
+
+    }
+
+    public static Question createQuestion()
+    {
+        Scanner scanner = new Scanner(System.in);
+        Question toAdd  = new Question();
+        String question = "";
+        String choice1 = "";
+        String choice2 = "";
+        String choice3 = "";
+        String answer = "";
+        System.out.println("\nPlease enter the question you wish to add: ");
+        question = scanner.nextLine();
+        System.out.println("\nPlease enter the correct answer: ");
+        answer = scanner.nextLine();
+        System.out.println("\nPlease enter a false choice: ");
+        choice1 = scanner.nextLine();
+        System.out.println("\nPlease enter a second false choice: ");
+        choice2 = scanner.nextLine();
+        System.out.println("\nPlease enter a third false choice: ");
+        choice3 = scanner.nextLine();
+        toAdd.setQuestion(question);
+        toAdd.setAnswer(answer);
+        toAdd.scrambleChoices(choice1, choice2, choice3, answer);
+
+
+
+        return null;
+    }
+
+    public void scrambleChoices(String one, String two, String three, String four)
+    {
+        Random rand = new Random();
+        int ans = rand.nextInt(4);
+        this.setChoice(ans, four);
+        this.setChoice((ans+1)%4, one);
+        this.setChoice((ans+2)%4, two);
+        this.setChoice((ans+3)%4, three);
+    }
+
+
+    private void poseQuestion()
+    {
+        System.out.println("\nQuestion: ");
+        System.out.println(this.getQuestion());
+        System.out.println("\nChoices: ");
+        System.out.println("1 " + this.getChoices()[0]);
+        System.out.println("2 " + this.getChoices()[1]);
+        System.out.println("3 " + this.getChoices()[2]);
+        System.out.println("4 " + this.getChoices()[3]);
+    }
+
+    private boolean takeAndEvaluateAnswer()
+    {
+        boolean ansIn = false;
+        Scanner scanner = new Scanner(System.in);
+        String answerIn;
+        int choice = 0;
+        do
+        {
+            try
+            {
+                choice = scanner.nextInt();
+            } catch (InputMismatchException e)
+            {
+                System.out.println("\nInvalid Selection");
+            }
+        }while(choice<1 || choice>4);
+        answerIn = this.getChoices()[choice];
+
+    }
+    public static void questionEvent(Question pi)
+    {
+        pi.poseQuestion();
+        pi.takeAndEvaluateAnswer();
     }
 }
