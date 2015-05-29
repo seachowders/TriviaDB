@@ -6,9 +6,19 @@ public class Choice
     String choice;
     boolean isCorrectChoice;
 
-    public Choice(String choice, boolean incBool)
+    public Choice(String choice)
     {
         this.choice = choice;
-        this.isCorrectChoice = incBool;
+        this.isCorrectChoice = false;
     }
+    public void setToTrue()
+    {
+        this.isCorrectChoice = true;
+    }
+    public void setChoice(String choice)
+    {
+        this.choice = choice;
+    }
+    public boolean isTrue(){return this.isCorrectChoice;}
+    public String toString(){return this.choice;}
 }
